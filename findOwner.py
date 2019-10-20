@@ -12,13 +12,13 @@ def connect_to_api(domain, request):
 
 def check_dns(name):
     json_response = connect_to_api("dns.google.com", "/resolve?name=" + name + "&type=A")
-    result = []
+    ips_list = []
     for answer in json_response.get('Answer'):
         data = answer.get('data')
         splitted_data = data.split('.')
         if splitted_data[0].isnumeric():
-            result.append(data)
-    return result
+            ips_list.append(data)
+    return ips_list
 
 
 def check_ip(ip_list, api_key):
