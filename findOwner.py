@@ -3,7 +3,7 @@ import sys
 from http import client
 
 
-def connect_to_api(domain, request):
+def send_get_request(domain, request):
     connection = client.HTTPSConnection(domain)
     connection.request("GET", request)
     response = connection.getresponse().read().decode("utf-8")
@@ -11,7 +11,7 @@ def connect_to_api(domain, request):
 
 
 def check_dns(name):
-    json_response = connect_to_api("dns.google.com", "/resolve?name=" + name + "&type=A")
+    json_response = send_get_request("dns.google.com", "/resolve?name=" + name + "&type=A")
     ips_list = []
     for answer in json_response.get('Answer'):
         data = answer.get('data')
@@ -24,7 +24,7 @@ def check_dns(name):
 def check_ip(ip_list, api_key):
     list_organization = []
     for ip in ip_list:
-        json_response = connect_to_api("www.whoisxmlapi.com", "/whoisserver/WhoisService?apiKey=" + api_key + "&domainName=" + ip + "&outputFormat=JSON")
+        json_response = send_get_request("www.whoisxmlapi.com", "/whoisserver/WhoisService?apiKey=" + api_key + "&domainName=" + ip + "&outputFormat=JSON")
         for record in json_response.get('WhoisRecord').get('subRecords'):
             list_organization.append(record.get('registrant').get('organization'))
 
